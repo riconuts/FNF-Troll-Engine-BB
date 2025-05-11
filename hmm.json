@@ -1,0 +1,77 @@
+{
+	"dependencies": [
+		{
+			"name": "openfl",
+			"type": "git",
+			"dir": null,
+			"ref": "develop",
+			"url": "https://github.com/swordcubes-grave-of-shite/openfl"
+		},
+		{
+			"name": "lime",
+			"type": "git",
+			"dir": null,
+			"ref": "develop",
+			"url": "https://github.com/swordcubes-grave-of-shite/lime"
+		},
+		{
+			"name": "flixel",
+			"type": "haxelib",
+			"version": "5.6.2"
+		},
+		{
+			"name": "flixel-ui",
+			"type": "haxelib",
+			"version": "2.6.1"
+		},
+		{
+			"name": "flixel-addons",
+			"type": "haxelib",
+			"version": "3.2.3"
+		},
+		{
+			"name": "hxcpp",
+			"type": "haxelib",
+			"version": null
+		},
+		{
+			"name": "hxcpp-debug-server",
+			"type": "haxelib",
+			"version": null
+		},
+		{
+			"name": "hscript",
+			"type": "git",
+			"dir": null,
+			"ref": "master",
+			"url": "https://github.com/nebulazorua/t-hscript"
+		},
+		{
+			"name": "hxvlc",
+			"type": "haxelib",
+			"version": "2.0.1"
+		},
+		{
+			"name": "flxanimate",
+			"type": "haxelib",
+			"version": "3.0.4"
+		},
+		{
+			"name": "hxdiscord_rpc",
+			"type": "haxelib",
+			"version": "1.1.1"
+		},
+		{
+			"name": "linc_luajit",
+			"type": "git",
+			"dir": null,
+			"ref": "master",
+			"url": "https://github.com/riconuts/linc_luajit"
+		},
+		{
+			"name": "moonchart",
+			"type": "haxelib",
+			"version": "0.4.0"
+		}
+	]
+}
