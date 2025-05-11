@@ -25,17 +25,13 @@ A:
 
 Big ones like song mods are currently being ported to this Troll fork right now, consider all the QOL mods obselete and no longer in active development.
 
-V-Slice is not a reliable modding platform.
+V-Slice is not a reliable modding platform. For more information check out [this](rants/vslice.md)
 
-Q: Why not use Psych, or other forks like "P-Slice", or NightmareVision?
+Q: Why not just use Psych, or other forks like "P-Slice", or NightmareVision, or even Codename?
 
-A: 
+A:
 
-Psych is dead, I do not want to use Psych Engine 1.0. "P-Slice" is just Psych with the menus swapped and that means nothing to me. 
-
-I will not use NightmareVision as all of it's code is taken from an older and inferior version of what Troll Engine has. (see: Vs. EXE 2.5 Fork)
-
-NightmareVision only garners popularity because of Hit Single and other popular mods programmed by the engine's "authors" and is completely unremarkable on it's own (like a modern "Forever Engine"). I'm tired of non-programmers recommending it, all of it's features are all but outdated Andromeda Engine code taken without permission or tangeble credit patched onto a 3 year old version of Psych Engine. Even if this wasn't the case, I wouldn't use it because I do not support the EXE community and wish to see it wiped off the face of the earth
+I will not be able to fit this in a tiny readme, check [this](rants/others.md) instead.
 
 # Added features
 
