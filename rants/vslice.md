@@ -20,7 +20,5 @@ which is overkill on it's own, add extreme anti-ghost tapping mixed with Psych s
 The way they treat the API version clause in _polymod_metadata.json is a joke, it completely stops your mod from working despite how in
 like Forge and shit, they simply warn you that the creator did not check for compatibility for this version and never nag you about it afterwards,
 if I have to update my mods constantly despite no breaking changes being made to my code in the first place because a random hotfix broke something I did not use.
-I'm rightfully gonna be pissed about it.
-
-Oh and I forgot to mention, they LOVE breaking changes, it could happen between hotfixes, between major updates, it doesn't matter, your mod is not lasting 6 months
-if you make it for V-Slice.
+I'm rightfully gonna be pissed about it. Oh and I forgot to mention, they LOVE breaking changes, it could happen between hotfixes, between major updates, it doesn't matter, 
+your mod is not lasting 6 months if you make it for V-Slice.
