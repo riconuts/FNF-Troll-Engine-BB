@@ -22,3 +22,13 @@ like Forge and shit, they simply warn you that the creator did not check for com
 if I have to update my mods constantly despite no breaking changes being made to my code in the first place because a random hotfix broke something I did not use.
 I'm rightfully gonna be pissed about it. Oh and I forgot to mention, they LOVE breaking changes, it could happen between hotfixes, between major updates, it doesn't matter, 
 your mod is not lasting 6 months if you make it for V-Slice.
+
+The tribalism from people working with V-Slice is also so irritating that I'd not even work with the engine even if it was good.
+Most of them are distasteful of people's choices, completely ignore every issue people have with the engine, and if you try to
+disclose any issues, they'll brand you as some ungreatful bitch, as if it's distasteful to say why an engine is bad because
+the small indie developers with 20,000,000 dollars cannot make an engine better than a random dude who lives in brazil
+making an engine on a gaming laptop with no budget.
+
+And before you misphrase anything, I am not speaking from 5 days of usage or something, I have sunk so much time into this engine in it's earlier years 
+that I'm still porting mods from it, I've grown so irritated of how the engine works, from the gameplay to the stutters to the many annoying crashes and
+bugs that come my way, I am never touching it again, for the sake of my mods' gameplay, performance, stability and my own sanity.

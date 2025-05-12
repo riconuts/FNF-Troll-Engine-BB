@@ -21,7 +21,8 @@ class MasterEditorMenu extends MusicBeatState
 		'Chart Editor',
 		'Stage Editor',
 		'Stage Builder',
-		'Test Stage'
+		'Test Stage',
+		'Test Beta Freeplay'
 	];
 	private var menu:AlphabetMenu;
 	private var directories:Array<String> = [null];
@@ -52,6 +53,7 @@ class MasterEditorMenu extends MusicBeatState
 				case 'Chart Editor': LoadingState.loadAndSwitchState(new ChartingState(), false);
 				case 'Stage Builder': MusicBeatState.switchState(new StageBuilderState());
 				case "Test Stage": MusicBeatState.switchState(new TestState());
+				case "Test Beta Freeplay": MusicBeatState.switchState(new funkin.states.experimental.FreeplayState());
 				default: return;
 			}
 			
