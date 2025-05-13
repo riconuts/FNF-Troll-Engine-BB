@@ -15,7 +15,8 @@ format using a text editor. The stage editor is the only decent one and they did
 
 Not to mention how the direction they're taking towards the gameplay of the whole thing, despite it being a 4 judgement rhythm game, 
 they decide to make Goods and Sicks essentially the same accuracy grade, with anything lower being treated the same as misses,
-which is overkill on it's own, add extreme anti-ghost tapping mixed with Psych styled anti-spam, and you got a recipe for disaster.
+which is overkill on it's own, add extreme anti-ghost tapping mixed with Psych styled anti-spam, and you got a recipe for disaster. 
+Especially with the insane lag spikes you get at random because the garbage collector is clearing so many event objects at a time constantly, even in the menus, making most songs near impossible to have consistant accuracy in, I'd rather play Week 6.
 
 The way they treat the API version clause in _polymod_metadata.json is a joke, it completely stops your mod from working despite how in
 like Forge and shit, they simply warn you that the creator did not check for compatibility for this version and never nag you about it afterwards,
