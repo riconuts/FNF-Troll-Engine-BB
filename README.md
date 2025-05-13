@@ -1,4 +1,4 @@
-# Troll Engine Burgerballs Mod Fork
+# BBTE
 
 Hello guys this is me burgerballs, this here is the fork i use for my fnf mods.
 As troll engine is already perfect i kinda only needed to change small tiny things to make it easier for me.
@@ -7,7 +7,7 @@ As this is my own personal fork, expect bloat, this is meant to be used by nobod
 
 I've modified the `install_haxelibs` files, before building you should check them out.
 
-NOTE: Do not treat this as an official release!!! This version of the engine is unendorsed by the original creators. Despite this, this fork will try to stay as synchronized with the original release as I possibly can until breaking changes arise.
+NOTE: Do not treat this as an official release!!! This version of the engine is unendorsed by the original creators.
 
 # QNA
 
