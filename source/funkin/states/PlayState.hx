@@ -116,7 +116,7 @@ class PlayState extends MusicBeatState
 {
 	public var extraData:Map<String, Dynamic> = [];
 
-	var legacyOnCreatePost:Bool = true; // Can be set by scripts to make onCreatePost be called where it used to be (before the countdown and super.create)
+	var legacyOnCreatePost:Bool = false; // Can be set by scripts to make onCreatePost be called where it used to be (before the countdown and super.create)
 	// NOTE: Make this false probably before 1.0 or 1.1 releases
 	// true by default rn just for the sake of not breaking things
 	// You can set it to false in a script if you wanna make sure things dont break when its false tho
@@ -630,21 +630,6 @@ class PlayState extends MusicBeatState
 		camOther.bgColor = 0;
 		camStageUnderlay.bgColor = 0;
 
-		FlxG.cameras.reset(camGame);
-		FlxG.cameras.add(camStageUnderlay, false);
-		FlxG.cameras.add(camHUD, false);
-		FlxG.cameras.add(camOverlay, false);
-		FlxG.cameras.add(camOther, false);
-
-		FlxG.cameras.setDefaultDrawTarget(camGame, true);
-
-		camFollow = prevCamFollow != null ? prevCamFollow : new FlxPoint();
-		camFollowPos = prevCamFollowPos != null ? prevCamFollowPos : new FlxObject();
-
-		camGame.follow(camFollowPos, LOCKON, 1);
-		camGame.focusOn(camFollow);
-		camGame.zoom = defaultCamZoom;
-
 		////
 		if (SONG == null){
 			trace("WARNING: null SONG");
@@ -1112,6 +1097,24 @@ class PlayState extends MusicBeatState
 		luaDebugGroup.cameras = [camOther];
 		add(luaDebugGroup);
 
+		FlxG.cameras.reset(camGame);
+		callOnScripts("preHudCameraCreation");
+		FlxG.cameras.add(camStageUnderlay, false);
+		
+		FlxG.cameras.add(camHUD, false);
+		FlxG.cameras.add(camOverlay, false);
+		FlxG.cameras.add(camOther, false);
+		callOnScripts("postHudCameraCreation");
+
+		FlxG.cameras.setDefaultDrawTarget(camGame, true);
+
+		camFollow = prevCamFollow != null ? prevCamFollow : new FlxPoint();
+		camFollowPos = prevCamFollowPos != null ? prevCamFollowPos : new FlxObject();
+
+		camGame.follow(camFollowPos, LOCKON, 1);
+		camGame.focusOn(camFollow);
+		camGame.zoom = defaultCamZoom;
+		
 		////
 		#if !tgt
 		if (prevCamFollowPos != null)
