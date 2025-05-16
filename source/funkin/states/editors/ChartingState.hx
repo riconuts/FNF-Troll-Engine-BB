@@ -121,7 +121,11 @@ class ChartingState extends MusicBeatState
 		],
 		[
 			"Set Character Alt",
-			"Alternative to the Alt Animation checkbox, also affects idle animation.\n\nVal1: Character\nVal2: Alt Suffix Name (set blank for default)"
+			"Alternative to the Alt Animation checkbox, also affects idle animation.\n\nVal1: Character\nVal2: Alt Suffix Name (set blank for none)"
+		],
+		[
+			"Toggle Voicelining",
+			"Makes it so an animation will never be interrupted by anything under any circumstance.\nVal1: Character\nVal2: True/False (Leave blank for false)"
 		]
 	];
 

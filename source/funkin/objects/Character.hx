@@ -64,6 +64,12 @@ class Character extends FlxSprite
 	/**String to be appended to idle animation names. For example, if this is -alt, then the animation used for idling will be idle-alt or danceLeft-alt/danceRight-alt**/
 	public var idleSuffix:String = '';
 
+	/*
+		String to be appended to animation names
+		WILL OVERRIDE THE IDLE SUFFIX IF NOT BLANK
+	*/
+	public var animSuffix:String = '';
+
 	/**Character uses "danceLeft" and "danceRight" instead of "idle"**/
 	public var danceIdle:Bool = false;
 
@@ -476,7 +482,8 @@ class Character extends FlxSprite
 		if (callOnScripts("onDance") == Globals.Function_Stop)
 			return;
 
-		playAnim(idleSequence[danceIndex] + idleSuffix, shouldForceDance);
+		var suffix = animSuffix != '' ? animSuffix : idleSuffix;
+		playAnim(idleSequence[danceIndex] + suffix, shouldForceDance);
 		
 		if (idleSequence.length > 1) {
 			danceIndex++;
@@ -524,7 +531,7 @@ class Character extends FlxSprite
 			return;
 		}
 
-		var animToPlay:String = Character.getNoteAnimation(note, field);
+		var animToPlay:String = Character.getNoteAnimation(note, field) + animSuffix;
 
 		playAnim(animToPlay, true);
 		holdTimer = 0.0;
@@ -541,7 +548,7 @@ class Character extends FlxSprite
 		var animToPlay:String = note.characterMissAnimName;
 		if (animToPlay == null) {
 			animToPlay = field.singAnimations[note.column % field.singAnimations.length];
-			animToPlay += note.characterMissAnimSuffix;
+			animToPlay += note.characterMissAnimSuffix + animSuffix;
 		}
 
 		playAnim(animToPlay + 'miss', true);

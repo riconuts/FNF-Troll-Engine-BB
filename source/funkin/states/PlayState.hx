@@ -2962,7 +2962,29 @@ class PlayState extends MusicBeatState
 							moveCamera(boyfriend);
 						}
 				}
+			// Made this because the alt anim note is fucking annoying to use + doesnt allow for multiple alts
+			case 'Set Character Alt':
+				switch(value1.toLowerCase().trim()){
+					case 'dad' | 'opponent':
+						dad.animSuffix = value2;
+					case 'gf' | 'girlfriend':
+						gf.animSuffix = value2;
+					default:
+						boyfriend.animSuffix = value2;
+				}
 
+			// for fleetway, mainl- I HAVE A BOMB, I HAVE A BOOOOMBBBBBBBB
+			case 'Toggle Voicelining':
+				var enabled = value2 != '';
+				switch(value1.toLowerCase().trim()){
+					case 'dad' | 'opponent':
+						dad.voicelining = enabled;
+					case 'gf' | 'girlfriend':
+						gf.voicelining = enabled;
+					default:
+						boyfriend.voicelining = enabled;
+				}
+			
 			case 'Game Flash':
 				var dur:Float = Std.parseFloat(value2);
 				if(Math.isNaN(dur)) dur = 0.5;
