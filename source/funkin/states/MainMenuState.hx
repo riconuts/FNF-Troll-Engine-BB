@@ -110,22 +110,15 @@ class MainMenuState extends MusicBeatState
 			menuItems.add(menuItem);
 		}
 
-
-		var versionShit:FlxText = new FlxText(14, FlxG.height - 36, 0, 'TE ' + Main.Version.displayedVersion + "\nFriday Night Funkin' v" + Application.current.meta.get('version') +'\nPsych Engine v0.5.2h', 8);
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, 'Troll Engine ' + Main.Version.displayedVersion, 12);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 11, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
-		versionShit.size = 22;
-		versionShit.scale.set(0.5,0.5);
-		versionShit.updateHitbox();
 
-		var keyHintUp = new KeyHint(14, FlxG.height - 96, 'Up', 'UI_UP', controls);
-		keyHintUp.scrollFactor.set();
-		add(keyHintUp);
-
-		var keyHintDown = new KeyHint(14, keyHintUp.y + 30, 'Down', 'UI_DOWN', controls);
-		add(keyHintDown);
-		keyHintDown.scrollFactor.set();
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "Friday Night Funkin' v" + Application.current.meta.get('version'), 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
 		
 		changeItem();
 
@@ -210,7 +203,7 @@ class MainMenuState extends MusicBeatState
 					switch (optionShit[curSelected])
 					{
 						case 'story_mode':
-							MusicBeatState.switchState(new StoryMenuState());
+							MusicBeatState.switchState(new StoryModeState());
 						case 'freeplay':
 							MusicBeatState.switchState(new FreeplayState());
 						/* #if MODS_ALLOWED

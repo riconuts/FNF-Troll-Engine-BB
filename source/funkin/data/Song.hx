@@ -793,7 +793,7 @@ class Song
 		return resultArray;
 	}
 
-	static public function loadSong(toPlay:Song, ?difficulty:String):SwagSong {
+	static public function loadSong(toPlay:Song, ?difficulty:String, isStory = false):SwagSong {
 		Paths.currentModDirectory = toPlay.folder;
 
 		if (difficulty == null || difficulty == "") {
@@ -810,10 +810,12 @@ class Song
 		PlayState.SONG = song;
 		PlayState.difficulty = toPlay.charts.indexOf(difficulty);
 		PlayState.difficultyName = difficulty;
-		PlayState.isStoryMode = false;
+		if (!isStory) {
+			PlayState.isStoryMode = false;
 
-		PlayState.songPlaylist = [toPlay];
-		PlayState.songPlaylistIdx = 0;
+			PlayState.songPlaylist = [toPlay];
+			PlayState.songPlaylistIdx = 0;
+		}
 		return song;
 	}
 

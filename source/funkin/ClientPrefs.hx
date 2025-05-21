@@ -68,6 +68,13 @@ class ClientPrefs
 				value: false,
 				data: []
 			},
+			"fish" => {
+				display: "Giant Fucking Fish",
+				desc: "When toggled, a giant fucking fish appears that covers the game if you get 100% accuracy",
+				type: Toggle,
+				value: false,
+				data: []
+			},
 			"indicateNear" => {
 				display: "Indicate Near Notes",
 				desc: "When toggled, notes of supported skins and types will get brighter to indicate if the player is able to hit them.\nMuch like FPS+!",
@@ -463,6 +470,21 @@ class ClientPrefs
 						'"Ro-FNF"',
 						"Psych",
 						"Kade"
+					]
+				]
+			},
+			"windowSize" => {
+				display: "Window Size",
+				desc: "The size of the game in windowed mode.",
+				type: Dropdown,
+				value: "1280x720",
+				data: [
+					"options" => [
+						'854x480',
+						'1280x720',
+						"1920x1080",
+						"2560x1440",
+						"3640x2160"
 					]
 				]
 			},

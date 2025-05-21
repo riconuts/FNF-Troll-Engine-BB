@@ -7,6 +7,7 @@ import funkin.data.CharacterData;
 import math.CoolMath;
 import funkin.data.Cache;
 import funkin.data.Song;
+import funkin.data.Level;
 import funkin.data.Section;
 import funkin.objects.Note;
 import funkin.objects.NoteSplash;
@@ -53,6 +54,8 @@ import lime.media.openal.ALEffect;
 import openfl.events.KeyboardEvent;
 import openfl.filters.BitmapFilter;
 import openfl.filters.ShaderFilter;
+
+import funkin.objects.cutscenes.*;
 
 using StringTools;
 using funkin.CoolerStringTools;
@@ -110,10 +113,46 @@ typedef SpeedEvent =
 	#end
 	speed:Float // speed mult after the change
 }
+class CutsceneSequence {
+	public var onNextSceneRan:FlxTypedSignal<Cutscene->Void> = new FlxTypedSignal<Cutscene->Void>();
+	public var onSceneFinished:FlxTypedSignal<Cutscene->Void> = new FlxTypedSignal<Cutscene->Void>();
+	public var onSequenceEnd:FlxTypedSignal<Void->Void> = new FlxTypedSignal<Void->Void>();
+	public var scenes:Array<Cutscene> = [];
+
+	public function push(scene:Cutscene)
+		scenes.push(scene);
+
+	public var currentScene: Cutscene;
+
+	public function runNextScene(): Null<Cutscene> 
+	{
+		currentScene = scenes.shift();
+		if(currentScene == null){
+			onSequenceEnd.dispatch();
+			return null;
+		}
+
+		currentScene.createCutscene();
+		onNextSceneRan.dispatch(currentScene);
+
+		currentScene.onEnd.add((_:Bool)->{
+			onSceneFinished.dispatch(currentScene);
+		});
+
+		return currentScene;
+	}
+
+	public function new(){}
+}
 
 @:noScripting
 class PlayState extends MusicBeatState
 {
+
+	public var disableCameraMovement:Bool = false;
+
+	public static var level:Level;
+
 	public var extraData:Map<String, Dynamic> = [];
 
 	var legacyOnCreatePost:Bool = false; // Can be set by scripts to make onCreatePost be called where it used to be (before the countdown and super.create)
@@ -126,6 +165,10 @@ class PlayState extends MusicBeatState
 	public static var SONG:SwagSong = null;
 	public static var songPlaylist:Array<Song> = [];
 	public static var songPlaylistIdx = 0;
+
+
+	public var startCutscenes:CutsceneSequence = new CutsceneSequence();
+	public var endCutscenes:CutsceneSequence = new CutsceneSequence();
 
 	private static var song(get, never):Song;
 	private static function get_song() return songPlaylist[songPlaylistIdx];
@@ -459,7 +502,18 @@ class PlayState extends MusicBeatState
 	public var hudSkin(default, set):String;
 	public var hudSkinScript:FunkinHScript; // this is the HUD skin used for countdown, judgements, etc
 
-	////
+	public static function loadPlaylist(playlist:Array<Song>, chartId:String) {
+		PlayState.loadSong(playlist[0], chartId);
+		PlayState.songPlaylist = playlist;
+		PlayState.songPlaylistIdx = 0;	
+	}
+
+	private static function loadSong(song:Song, chartId:String, isStory = false) {
+		Paths.currentModDirectory = song.folder;
+
+		PlayState.SONG = Song.loadSong(song, chartId, isStory);
+	}
+
 	@:noCompletion function set_hudSkin(value:String){
 		var script = getHudSkinScript(value);
 		
@@ -1182,7 +1236,69 @@ class PlayState extends MusicBeatState
 		super.create();
 
 		RecalculateRating();
-		startCountdown();
+
+		startCutscenes.onSequenceEnd.addOnce(startCountdown);
+			startCutscenes.onSceneFinished.add((scene: Cutscene) -> {
+				remove(scene);
+				songIntroCutscene();
+		});
+
+		endCutscenes.onSequenceEnd.addOnce(endSong);
+		endCutscenes.onSceneFinished.add((scene: Cutscene) -> {
+			remove(scene);
+			endSongCutscenes();
+		});
+
+		generateStrums();
+
+		#if ALLOW_DEPRECATION
+		callOnScripts('preModifierRegister'); // deprecated
+		#end
+
+		if (callOnScripts('onModifierRegister') != Globals.Function_Stop) {
+			modManager.registerDefaultModifiers();
+
+			#if !tgt
+			if (midScroll) {
+				var opp:Int = playOpponent ? 0 : 1;
+				switch (ClientPrefs.midScrollType) {
+					case '"Ro-FNF"':
+						modManager.setValue('transformZ', -1280, opp);
+						modManager.setValue('transformX', -480, opp);
+						modManager.setValue('drawDistance', 4000, opp);
+						modManager.setValue("opponentSwap", 0.5, playOpponent ? 1 : 0);
+					case "Psych":
+						var off:Float = Math.min(FlxG.width, 1280) / 4;
+						
+						var halfKeys:Int = Math.floor(keyCount / 2);
+						if (keyCount % 2 != 0) // middle receptor dissappears, if there is one
+							modManager.setValue('alpha${halfKeys + 1}', 1.0, opp);
+						
+						for (i in 0...halfKeys)
+							modManager.setValue('transform${i}X', -off, opp);
+						for (i in keyCount-halfKeys...keyCount)
+							modManager.setValue('transform${i}X', off, opp);
+
+						modManager.setValue("alpha", 0.6, opp);
+						modManager.setValue("opponentSwap", 0.5);
+					default:
+						modManager.setValue("alpha", 1, opp);
+						modManager.setValue("opponentSwap", 0.5);
+				}
+			}
+			#end
+
+			signals.onModifierRegister.dispatch();
+		}
+		#if ALLOW_DEPRECATION
+		callOnScripts('postModifierRegister'); // deprecated
+		#end
+		callOnScripts('onModifierRegisterPost');
+		signals.onModifierRegisterPost.dispatch();
+
+
+		songIntroCutscene();
+
 
 		if(!legacyOnCreatePost) // Just incase shit breaks???
 			callOnAllScripts('onCreatePost');
@@ -1196,6 +1312,48 @@ class PlayState extends MusicBeatState
 		updateKeybinds();
 
 		Paths.clearUnusedMemory();
+	}
+
+	function songIntroCutscene(){
+		inCutscene = true;
+		var cutscene: Cutscene = startCutscenes.runNextScene();
+		if(cutscene is VideoCutscene)
+			cutscene.cameras = [camOverlay];
+		
+		add(cutscene);
+	}
+
+	public function endSongCutscenes(){
+		inCutscene = true;
+		var cutscene: Cutscene = endCutscenes.runNextScene();
+		if(cutscene is VideoCutscene)
+			cutscene.cameras = [camOverlay];
+		
+		add(cutscene);
+	}
+
+	public function openCutscenePauseMenu(scene: Cutscene)
+	{
+		trace(scene);
+		if (callOnScripts('onPause') == Globals.Function_Stop) 
+			return;
+		
+		// 0 chance for Gitaroo Man easter egg
+		pause();
+		persistentUpdate = false;
+		persistentDraw = true;
+		scene.pause();
+		openSubState(new CutscenePauseSubstate(scene));
+	}
+
+	function onPlaylistEnd() {
+		if (isStoryMode && level != null) {
+			// Week ended, save week score
+			if (saveScore && !practiceMode && !cpuControlled && !playOpponent) {
+				Highscore.saveWeekScore(level.id, campaignScore);				
+			}
+			level = null;
+		}
 	}
 
 	function updateKeybinds() {
@@ -1563,53 +1721,6 @@ class PlayState extends MusicBeatState
 
 		if (skipCountdown || startOnTime > 0)
 			skipArrowStartTween = true;
-
-		generateStrums();
-
-		#if ALLOW_DEPRECATION
-		callOnScripts('preModifierRegister'); // deprecated
-		#end
-
-		if (callOnScripts('onModifierRegister') != Globals.Function_Stop) {
-			modManager.registerDefaultModifiers();
-
-			#if !tgt
-			if (midScroll) {
-				var opp:Int = playOpponent ? 0 : 1;
-				switch (ClientPrefs.midScrollType) {
-					case '"Ro-FNF"':
-						modManager.setValue('transformZ', -1280, opp);
-						modManager.setValue('transformX', -480, opp);
-						modManager.setValue('drawDistance', 4000, opp);
-						modManager.setValue("opponentSwap", 0.5, playOpponent ? 1 : 0);
-					case "Psych":
-						var off:Float = Math.min(FlxG.width, 1280) / 4;
-						
-						var halfKeys:Int = Math.floor(keyCount / 2);
-						if (keyCount % 2 != 0) // middle receptor dissappears, if there is one
-							modManager.setValue('alpha${halfKeys + 1}', 1.0, opp);
-						
-						for (i in 0...halfKeys)
-							modManager.setValue('transform${i}X', -off, opp);
-						for (i in keyCount-halfKeys...keyCount)
-							modManager.setValue('transform${i}X', off, opp);
-
-						modManager.setValue("alpha", 0.6, opp);
-						modManager.setValue("opponentSwap", 0.5);
-					default:
-						modManager.setValue("alpha", 1, opp);
-						modManager.setValue("opponentSwap", 0.5);
-				}
-			}
-			#end
-
-			signals.onModifierRegister.dispatch();
-		}
-		#if ALLOW_DEPRECATION
-		callOnScripts('postModifierRegister'); // deprecated
-		#end
-		callOnScripts('onModifierRegisterPost');
-		signals.onModifierRegisterPost.dispatch();
 
 		startedCountdown = true;
 		setOnScripts('startedCountdown', true);
@@ -2463,7 +2574,7 @@ class PlayState extends MusicBeatState
 		#end
 
 		if (ClientPrefs.autoPause && !paused && startedCountdown && canPause) {
-			openPauseMenu();
+			doPauseShit();
 		}
 
 		super.onFocusLost();
@@ -2625,7 +2736,7 @@ class PlayState extends MusicBeatState
 		if (hudSkinScript != null)
 			hudSkinScript.call("onUpdate", [elapsed]);
 
-		if (!inCutscene) {
+		if (!disableCameraMovement) {
 			var xOff:Float = 0;
 			var yOff:Float = 0;
 
@@ -2634,9 +2745,11 @@ class PlayState extends MusicBeatState
 				yOff = focusedChar.camOffY;
 			}
 
-			var currentCameraPoint = cameraPoints[cameraPoints.length-1];
-			if (currentCameraPoint != null)
-				camFollow.copyFrom(currentCameraPoint);
+			if(!inCutscene){
+				var currentCameraPoint = cameraPoints[cameraPoints.length-1];
+				if (currentCameraPoint != null)
+					camFollow.copyFrom(currentCameraPoint);
+			}
 
 			var lerpVal:Float = Math.exp(-elapsed * 2.4 * cameraSpeed);
 			camFollowPos.setPosition(
@@ -2721,8 +2834,8 @@ class PlayState extends MusicBeatState
 			}else if (doDeathCheck()) {
 				// die lol
 
-			}else if (controls.PAUSE && startedCountdown && canPause) {
-				openPauseMenu();
+			}else if (controls.PAUSE && canPause) {
+				doPauseShit();
 			}
 		}
 
@@ -3202,7 +3315,7 @@ class PlayState extends MusicBeatState
 		// MusicBeatState.switchState(new MainMenuState());
 		if (isStoryMode){
 			MusicBeatState.playMenuMusic(1, true);
-			MusicBeatState.switchState(new StoryMenuState());
+			MusicBeatState.switchState(new StoryModeState());
 		}else{
 			FreeplayState.comingFromPlayState = true;
 			MusicBeatState.switchState(new FreeplayState());
@@ -3271,7 +3384,7 @@ class PlayState extends MusicBeatState
 			openChartEditor();
 		}
 		else {
-			nextSong = songPlaylist[++songPlaylistIdx];
+			nextSong = songPlaylist[songPlaylistIdx + 1];
 		} 
 
 		if (isStoryMode) {
@@ -3290,18 +3403,21 @@ class PlayState extends MusicBeatState
 		}
 
 		if (nextSong != null) {
-			trace('LOADING NEXT SONG: $nextSong');
-
 			prevCamFollow = camFollow;
 			prevCamFollowPos = camFollowPos;
 
 			gotoNextThing = function gotoNextSong() {
-				if (FlxG.state is PlayState) {
-					FlxTransitionableState.skipNextTransIn = true;
-					FlxTransitionableState.skipNextTransOut = true;
-				}
-				nextSong.play(difficultyName);
+				FlxTransitionableState.skipNextTransIn = true;
+				FlxTransitionableState.skipNextTransOut = true;
+
+				PlayState.songPlaylistIdx++;
+				trace('LOADING NEXT SONG: $nextSong, (${PlayState.songPlaylistIdx + 1} / ${PlayState.songPlaylist.length})');
+				PlayState.loadSong(nextSong, PlayState.difficultyName, true);
+				MusicBeatState.switchState(new PlayState());
 			}
+		} else {
+			trace('PLAYLIST END (${PlayState.songPlaylistIdx + 1} / ${PlayState.songPlaylist.length})');
+			onPlaylistEnd();
 		}
 
 		if (gotoNextThing != null) {
@@ -4424,7 +4540,6 @@ class PlayState extends MusicBeatState
 		setOnScripts('ratingFC', ratingFC);
 	}
 
-	////
 	public function openPauseMenu()
 	{
 		if (callOnScripts('onPause') == Globals.Function_Stop) 
@@ -4435,6 +4550,16 @@ class PlayState extends MusicBeatState
 		persistentUpdate = false;
 		persistentDraw = true;
 		openSubState(new PauseSubState());
+	}
+
+	public function doPauseShit()
+	{
+		if (startCutscenes.currentScene == null && endCutscenes.currentScene == null){
+			if(startedCountdown)
+				openPauseMenu();
+		}else{
+			openCutscenePauseMenu(startedCountdown ? endCutscenes.currentScene : startCutscenes.currentScene);
+		}
 	}
 
 	public function pause(){
