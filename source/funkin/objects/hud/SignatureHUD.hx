@@ -40,12 +40,68 @@ class SignatureHUD extends CommonHUD {
 		statsTxt.borderSize = 2;
 		add(statsTxt);
 		statsTxt.antialiasing = true;
+		updateHud();
+
+		timeBarBG.makeGraphic(160, 12, 0xFF000000);
+		timeBarBG.y = statsTxt.y + statsTxt.height;
+		timeBarBG.x = FlxG.width - timeBarBG.width - 8;
+		timeBar.barWidth = Std.int(timeBarBG.width - 4);
+		timeBar.barHeight = Std.int(timeBarBG.height - 4);
+		timeBar.x = timeBarBG.x + 2;
+		timeBar.y = timeBarBG.y + 2;
+		timeBar.createFilledBar(0xFF000000, 0xFFFFFFFF);
+		timeTxt.x = timeBarBG.x + 4;
+		timeTxt.y = timeBarBG.y - 1;
+		timeTxt.width = 160;
+		timeTxt.setFormat(Paths.font("vcr.ttf"), 12, FlxColor.WHITE, LEFT, OUTLINE, FlxColor.BLACK);
+		timeTxt.borderSize = 1;
     }
 
     var scoreString = Paths.getString("score");
 
 	override function update(elapsed:Float){
 		super.update(elapsed);
+		updateHud();
+	}
+
+	override function changedOptions(changed:Array<String>)
+	{
+		healthBar.healthBarBG.y = FlxG.height * (ClientPrefs.downScroll ? 0.11 : 0.89);
+		healthBar.y = healthBarBG.y + 5;
+		healthBar.iconP1.y = healthBar.y + (healthBar.height - healthBar.iconP1.height) / 2;
+		healthBar.iconP2.y = healthBar.y + (healthBar.height - healthBar.iconP2.height) / 2;
+		healthBar.real_alpha = healthBar.real_alpha;
+
+		botplayText.active = botplayText.visible = ClientPrefs.botplayMarker == 'Psych';
+		useSubtleMark = ClientPrefs.botplayMarker == 'Subtle';
+
+		updateTimeBarType();
+	}
+
+	override function updateTimeBarType()
+	{
+		// trace("time bar update", ClientPrefs.timeBarType); // the text size doesn't get updated sometimes idk why
+
+		updateTime = (ClientPrefs.timeBarType != 'Disabled' && ClientPrefs.timeOpacity > 0);
+
+		timeTxt.exists = updateTime;
+		timeBarBG.exists = updateTime;
+		timeBar.exists = updateTime;
+
+		if (ClientPrefs.timeBarType == 'Song Name')
+		{
+			timeTxt.text = PlayState.SONG.song;
+			timeTxt.offset.y = -3;
+		}
+		else
+		{
+			timeTxt.text = "";
+			timeTxt.offset.y = 0;
+		}
+		updateTimeBarAlpha();
+	}
+
+	function updateHud() {
 		var shownScore:Float = 0;
 		if (ClientPrefs.showWifeScore)
 			shownScore = Math.floor(stats.totalNotesHit * 100);
@@ -59,6 +115,7 @@ class SignatureHUD extends CommonHUD {
 
         accuracyTxt.text = '${Highscore.floorDecimal(ratingPercent * 100, 3)}%';
         statsTxt.text = 'Misses: ${stats.misses}\n${ratingFC} - ${grade}';
+		AlignmentUtil.centerObjectInObject(timeTxt, timeBar, Y);
 	}
 
     override function reloadHealthBarColors(dadColor:FlxColor, bfColor:FlxColor)

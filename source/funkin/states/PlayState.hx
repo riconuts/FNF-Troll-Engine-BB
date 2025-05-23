@@ -579,7 +579,7 @@ class PlayState extends MusicBeatState
 		Wife3.timeScale = Wife3.judgeScales.get(ClientPrefs.judgeDiff);
 		PBot.missThreshold = Math.max(160, ClientPrefs.hitWindow);
 
-		ratingStuff = Highscore.grades.get(ClientPrefs.gradeSet);
+		ratingStuff = Highscore.grades.get(ClientPrefs.gradeSet) ?? Highscore.grades.get('Funkin');
 		stats = new Stats(ClientPrefs.accuracyCalc, ratingStuff);
 		stats.useFlags = ClientPrefs.gradeSet == 'Etterna';
 		noteOffset = ClientPrefs.noteOffset;

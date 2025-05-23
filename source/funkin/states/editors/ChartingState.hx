@@ -1,5 +1,6 @@
 package funkin.states.editors;
 
+import flixel.system.FlxAssets;
 import flixel.ui.FlxBar;
 import funkin.data.CharacterData;
 import funkin.objects.AttachedFlxText;
@@ -364,6 +365,7 @@ class ChartingState extends MusicBeatState
 	override function create()
 	{
 		instance = this;
+		FlxAssets.FONT_DEFAULT = Paths.font('calibrib.ttf');
 		
 		persistentUpdate = true;
 		persistentDraw = true;

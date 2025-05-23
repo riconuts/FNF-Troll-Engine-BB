@@ -47,26 +47,13 @@ class Highscore {
 
 	public static var grades:Map<String, Array<Array<Dynamic>>> = [
 		"Funkin" => [
-			["P", 1],
-			['E', 0.9],
-			['Silver G', 0.8],
-			['Bronze G', 0.6],
-			['L', 0.0],
-			['ULTRA L', -200] // if you somehow get BELOW -100, this is your prize! (Only applicable to Wife3)
-		],
-		"Psych" => [
-			["Perfect!!", 1],
-			["Sick!", 0.9],
-			["Great", 0.8],
-			["Good", 0.7],
-			["Nice", 0.69],
-			["Okay", 0.6],
-			["Meh", 0.5],
-			["Bad", 0.4],
-			["Bruh", 0.3],
-			["You Suck!", 0.01],
-			["Git Gud!!", -1],
-			["YOU ARE FUCKING ATROCIOUS", -200], // if you somehow get BELOW -100, this is your prize! (Only applicable to Wife3)
+			["Perfect Gold", 1],
+			["Perfect", 0.999935], // pooperna
+			['Excellent', 0.9],
+			['Great', 0.8],
+			['Good', 0.6],
+			['Loser', 0.0],
+			['ULTRA Loser', -200] // if you somehow get BELOW -100, this is your prize! (Only applicable to Wife3)
 		],
 		"Etterna" => [
 			["AAAAA", 0.999935],

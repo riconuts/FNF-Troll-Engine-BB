@@ -557,7 +557,7 @@ class ClientPrefs
 				display: "Grade Set",
 				desc: "What set of grades to use to rank performance ingame. Does not affect scores",
 				type: Dropdown,
-				value: "Psych",
+				value: "Funkin",
 				data: [
 					"options" => {
 						var arr:Array<String> = [for (key in funkin.data.Highscore.grades.keys()) key];
