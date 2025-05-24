@@ -398,32 +398,17 @@ typedef VSliceCharacterData =
 	var startingAnimation:Null<String>;
 	var flipX:Null<Bool>;
 };
-typedef AnimationData =
-{
-	var name:String;
-	@:optional
-	var prefix:String;
-	@:optional
-	var assetPath:Null<String>;
-	@:default([0, 0])
-	@:optional
-	var offsets:Null<Array<Float>>;
-	@:default(false)
-	@:optional
-	var looped:Bool;
-	@:default(false)
-	@:optional
-	var flipX:Null<Bool>;
-	@:default(false)
-	@:optional
-	var flipY:Null<Bool>;
-	@:default(24)
-	@:optional
-	var frameRate:Null<Int>;
-	@:default([])
-	@:optional
-	var frameIndices:Null<Array<Int>>;
-}
+typedef AnimationData = {
+	name:String,
+	?prefix:String,
+	?assetPath:String,
+	?offsets:Array<Float>,
+	?looped:Bool,
+	?flipX:Bool,
+	?flipY:Bool,
+	?frameRate:Int,
+	?frameIndices:Array<Int>
+};	
 typedef HealthIconData =
 {
 	@:optional

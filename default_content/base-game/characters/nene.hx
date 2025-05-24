@@ -1,10 +1,9 @@
+importClass("flxanimate.FlxAnimate");
 importClass("flixel.group.FlxTypedSpriteGroup");
 importClass("funkin.states.GameOverSubstate");
 import funkin.vis.dsp.SpectralAnalyzer;
-
 var analyzer:Null<SpectralAnalyzer> = null;
 var volumes:Array<Float> = [];
-
 
 function onGameOver() {
 	if (game.playOpponent) return;
@@ -13,7 +12,7 @@ function onGameOver() {
 	GameOverSubstate.endSoundName = "gameOverEnd-pico";
 }
 
-// a lotta stu copy-pasted from V-Slice.
+// a lotta stuff copy-pasted from V-Slice.
 // tho i removed the custom classes and train functionality.
 
 /**
@@ -105,8 +104,6 @@ var stereoBG:FlxSprite;
 var eyeWhites:FlxSprite;
 var pupil:FlxAtlasSprite;
 
-var members: Array<FlxBasic> = [];
-
 function setupCharacter() {
 	super();
 
@@ -116,7 +113,7 @@ function setupCharacter() {
 	eyeWhites.scale.set(160, 60);
 	eyeWhites.updateHitbox();
 	
-	pupil = new FlxAnimate(0, 0, "images/characters/abot/systemEyes", {
+	pupil = new FlxAnimate(0, 0, Paths.getPath("images/characters/abot/systemEyes"), {
 		FrameRate: 24.0,
 		Reversed: false,
 		ShowPivot: false,
@@ -124,7 +121,7 @@ function setupCharacter() {
 		ScrollFactor: null,
 	});
 	
-	abot = new FlxAnimate(0, 0, "images/characters/abot/abotSystem", {
+	abot = new FlxAnimate(0, 0, Paths.getPath("images/characters/abot/abotSystem"), {
 		FrameRate: 24.0,
 		Reversed: false,
 		ShowPivot: false,
@@ -151,57 +148,15 @@ function setupCharacter() {
 		abotVis.add(bar);
 	}
 
-	members.push(eyeWhites);
-	members.push(stereoBG);
-	members.push(pupil);
+	game.gfGroup.insert(game.gfGroup.members.indexOf(this), eyeWhites);
+	game.gfGroup.insert(game.gfGroup.members.indexOf(this), stereoBG);
+	game.gfGroup.insert(game.gfGroup.members.indexOf(this), pupil);
 	// game.gfGroup.insert(game.gfGroup.members.indexOf(this), abotVis);
-	members.push(abotVis);
-	members.push(abot);
+	game.gfGroup.insert(game.gfGroup.members.indexOf(this), abotVis);
+	game.gfGroup.insert(game.gfGroup.members.indexOf(this), abot);
 
 	copyTransforms();
 }
-
-function getDefaultLevels() {
-	var result = [];
-
-	for (i in 0...7) {
-		result.push({value: 0, peak: 0.0});
-	}
-
-	return result;
-}
-
-var levels = [];
-
-function onCharacterDraw(){
-	for (m in members)
-		m.draw();
-	if (abotVis == null) return;
-
-	if(analyzer != null){
-		for (i in 0...Math.min(abotVis.members.length, levels.length)) {
-			var animFrame:Int = Math.round(levels[i].value * 6);
-
-			// don't display if we're at 0 volume from the level
-			abotVis.members[i].visible = animFrame > 0;
-
-			// decrement our animFrame, so we can get a value from 0-5 for animation frames
-			animFrame -= 1;
-
-			animFrame = Math.floor(Math.min(5, animFrame));
-			animFrame = Math.floor(Math.max(0, animFrame));
-
-			animFrame = Std.int(Math.abs(animFrame - 5)); // shitty dumbass flip, cuz dave got da shit backwards lol!
-
-			abotVis.members[i].animation.curAnim.curFrame = animFrame;
-		}
-	}else{
-		for (i in 0...abotVis.members.length) 
-			abotVis.members[i].animation.curAnim.curFrame = Math.round(FlxMath.fastSin(visOffset + i) * 2.5 + 2.5);
-		
-	}
-}
-
 
 var lastX;
 var lastY;
@@ -234,50 +189,58 @@ function copyTransforms() {
 	abotVis.setPosition(abotX + 200, abotY + 84);
 	abotVis.alpha = lastA;
 	abotVis.visible = lastV;
-
-	for(m in members){
-		m.scrollFactor.set(this.scrollFactor.x, this.scrollFactor.y);
-	}
 }
 
-var lastTarget:String = 'bf';
 function onMoveCamera(target) {
-	if(target != lastTarget){
-		pupil.anim.play('');
-		pupil.anim.curFrame = (target == "bf") ? 17 : 0;
-		pupilState = (target == "bf") ? PUPIL_STATE_NORMAL : PUPIL_STATE_LEFT;
-	}
-	lastTarget = target;
+	pupil.anim.play('');
+	pupil.anim.curFrame = (target == "bf") ? 17 : 0;
+	pupilState = (target == "bf") ? PUPIL_STATE_NORMAL : PUPIL_STATE_LEFT;
 }
 
 function onCharacterUpdate(e) {
 	if (this.x != lastX || this.y != lastY || this.alpha != lastA || this.visible != lastV)
 		copyTransforms();
 
-	if (game.inst != null && game.inst._channel != null && analyzer == null){
-		// i really need to add more callbacks or playstate signals LOL
-		analyzer = new SpectralAnalyzer(game.inst, 7, 0.1, 40);
-		
-		analyzer.minDb = -65;
-		analyzer.maxDb = -25;
-		analyzer.maxFreq = 22000;
-		analyzer.minFreq = 10;
-		#if desktop
-		analyzer.fftN = 256;
-		#end
-		
-	}
-	if(analyzer != null)
-		levels = analyzer.getLevels();
-
 	visOffset += e * visOffsetSpeed;
 	visOffsetSpeed = FlxMath.lerp(visOffsetSpeed, game.songSpeed, e * 15);
 
-/* 	if (abotVis != null) {
-		for (i in 0...abotVis.members.length) {
-			abotVis.members[i].animation.curAnim.curFrame = Math.round(FlxMath.fastSin(visOffset + i) * 2.5 + 2.5);
+	// crashing for a reason i cannot explain, I'll fix this later but for now i'm just super lazy and won't do it.
+
+	// if (game.inst != null && game.inst._channel != null){
+	// 	// i really need to add more callbacks or playstate signals LOL
+	// 	analyzer = new SpectralAnalyzer(game.inst, 7, 0.1, 40);
+		
+	// 	analyzer.minDb = -65;
+	// 	analyzer.maxDb = -25;
+	// 	analyzer.maxFreq = 22000;
+	// 	analyzer.minFreq = 10;
+	// 	#if desktop
+	// 	analyzer.fftN = 256;
+	// 	#end
+		
+	// }
+	if(analyzer != null){
+		for (i in 0...Math.min(abotVis.members.length, levels.length)) {
+			var animFrame:Int = Math.round(levels[i].value * 6);
+
+			// don't display if we're at 0 volume from the level
+			abotVis.members[i].visible = animFrame > 0;
+
+			// decrement our animFrame, so we can get a value from 0-5 for animation frames
+			animFrame -= 1;
+
+			animFrame = Math.floor(Math.min(5, animFrame));
+			animFrame = Math.floor(Math.max(0, animFrame));
+
+			animFrame = Std.int(Math.abs(animFrame - 5)); // shitty dumbass flip, cuz dave got da shit backwards lol!
+
+			abotVis.members[i].animation.curAnim.curFrame = animFrame;
 		}
-	} */
+	}else{
+		for (i in 0...abotVis.members.length) 
+			abotVis.members[i].animation.curAnim.curFrame = Math.round(FlxMath.fastSin(visOffset + i) * 2.5 + 2.5);
+		
+	}
 
 	if (pupil != null && pupil.anim != null && pupil.anim.isPlaying) {
 		var checkFrame = (pupilState == PUPIL_STATE_LEFT) ? 17 : 30;
@@ -313,9 +276,6 @@ function onCharacterUpdate(e) {
 		default:
 			currentState = STATE_DEFAULT;
 	}
-
-	for (m in members)
-		m.update(e);
 }
 
 function onDance() {

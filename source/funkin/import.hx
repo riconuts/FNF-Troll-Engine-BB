@@ -1,7 +1,8 @@
 #if !macro
 import flixel.*;
 import flixel.sound.FlxSound;
-
+import flixel.addons.display.FlxTiledSprite;
+import funkin.vis.dsp.SpectralAnalyzer;
 #if tgt
 import funkin.tgt.MainMenuState;
 import funkin.tgt.FreeplayState;
