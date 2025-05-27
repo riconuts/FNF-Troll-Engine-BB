@@ -115,6 +115,8 @@ class SignatureHUD extends CommonHUD {
 
         accuracyTxt.text = '${Highscore.floorDecimal(ratingPercent * 100, 3)}%';
         statsTxt.text = 'Misses: ${stats.misses}\n${ratingFC} - ${grade}';
+		if (ClientPrefs.npsDisplay)
+			statsTxt.text += '\n'+stats.nps+'/'+stats.npsPeak;
 		AlignmentUtil.centerObjectInObject(timeTxt, timeBar, Y);
 	}
 
