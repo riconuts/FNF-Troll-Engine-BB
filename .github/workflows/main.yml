@@ -54,6 +54,8 @@ jobs:
           haxelib --always --quiet install moonchart 0.4.0
           haxelib --always --quiet git hxcpp https://github.com/HaxeFoundation/hxcpp
           haxelib --always --quiet install hxvlc 1.9.1
+          haxelib git funkin.vis https://github.com/nebulazorua/trollVis.git
+          haxelib git grig.audio https://gitlab.com/haxe-grig/grig.audio.git
         shell: cmd
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
