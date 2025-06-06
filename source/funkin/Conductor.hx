@@ -55,7 +55,6 @@ class Conductor
 			snd.play(true, getAccPosition());
 		}
 	}
-
 	public static function pauseSong() 
 	{
 		if (!Conductor.playing)

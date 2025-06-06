@@ -356,7 +356,6 @@ class NoteField extends FieldBase
 
 		var simpleDraw = !hold.copyX && !hold.copyY;
 		var subDivs:Int = simpleDraw ? 1 : holdSubdivisions;
-		// TODO: make simpleDraw reduce the amount of subdivisions used by the hold
 
 		var vertices = new Vector<Float>(8 * subDivs, true);
 		var uvData = new Vector<Float>(8 * subDivs, true);
@@ -381,10 +380,9 @@ class NoteField extends FieldBase
 
 		var lookAheadTime = modManager.getValue("lookAheadTime", modNumber);
 		var useSpiralHolds = modManager.getValue("spiralHolds", modNumber) != 0;
+
 		if (subDivs != prevSubDivs) {
-			trace('subdivisions changed, recalculating sustain progress');
 			progs = CoolMath.interpolateMass(0, 1, subDivs);
-			
 		}
 
 		var strumSub = (crotchet / subDivs) * sv;
@@ -420,8 +418,11 @@ class NoteField extends FieldBase
 				scale: scalePoint
 			};
 
+			var positioneer = (visualDiff + ((strumOff + strumSub) * 0.45));
+			var strumshit = strumDiff + strumOff + strumSub;
+
 			if (hold.copyAlpha)
-				info = modManager.getExtraInfo((visualDiff + ((strumOff + strumSub) * 0.45)) * -speed, strumDiff + strumOff + strumSub, curDecBeat, info, hold, modNumber, hold.column);
+				info = modManager.getExtraInfo(positioneer * -speed, strumshit, curDecBeat, info, hold, modNumber, hold.column);
 
 			var topWidth = scalePoint.x * FlxMath.lerp(tWid, bWid, prog);
 			var botWidth = scalePoint.x * FlxMath.lerp(tWid, bWid, nextProg);
@@ -430,7 +431,7 @@ class NoteField extends FieldBase
 
 			var offset = FlxMath.lerp(0, (crotchet + 1) * 0.45 * speed, prog);
 			var top = lastMe ?? getPoints(hold, topWidth, speed, (visualDiff + (strumOff * 0.45)), strumDiff + strumOff, lookAheadTime);
-			var bot = getPoints(hold, botWidth, speed, (visualDiff + ((strumOff + strumSub) * 0.45)), strumDiff + strumOff + strumSub, lookAheadTime);
+			var bot = getPoints(hold, botWidth, speed, positioneer, strumshit, lookAheadTime);
 			if (!hold.copyY) {
 				if (lastMe == null) {
 					top[0].y -= offset;

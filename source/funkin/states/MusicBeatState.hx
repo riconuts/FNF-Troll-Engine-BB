@@ -290,17 +290,15 @@ class MusicBeatState extends FlxUIState
 		if (curStep % 4 == 0)
 			beatHit();
 
-		if (songSyncMode == LEGACY) {
-			var needsResync:Bool = false;
-			for (track in Conductor.tracks) {
-				if (Math.abs(track.time - Conductor.getAccPosition()) > 30){
-					needsResync = true;
-					break;
-				}
+		var needsResync:Bool = false;
+		for (track in Conductor.tracks) {
+			if (Math.abs(track.time - Conductor.getAccPosition()) > 20 && Conductor.getAccPosition() < track.endTime){
+				needsResync = true;
+				break;
 			}
-			if (needsResync)
-				resyncTracks();
 		}
+		if (needsResync)
+			resyncTracks();
 	}
 
 	public function beatHit():Void
