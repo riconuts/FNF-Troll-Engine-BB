@@ -1,0 +1,21 @@
+function setupNote(note:Note){
+    note.frames = Paths.getSparrowAtlas('lr_NOTE_assets');
+    note.animation.addByPrefix("L Note", 'L Note');
+    note.animation.addByPrefix("R Note", 'R Note');
+    if (note.column == 0 || note.column == 1)
+        note.animation.play('L Note');
+    else
+        note.animation.play('R Note');
+    if (note.column == 0) {
+        note.offsetX += note.width / 8;
+    }
+    if (note.column == 1) {
+        note.offsetX += Note.swagWidth / 2;
+    }
+    if (note.column == 2) {
+        note.offsetX -= Note.swagWidth / 2;
+    }
+    if (note.column == 3) {
+        note.offsetX -= Note.swagWidth / 2;
+    }
+}

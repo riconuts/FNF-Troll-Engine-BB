@@ -1,0 +1,37 @@
+var lRChecks = [
+    [0,1],
+    [1,2],
+    [1,2],
+    [2,3]
+];
+
+
+function onFieldInput(field, column, hitNotes){
+    var noteList = [];
+    for (col in [0,1,2,3]) {
+        noteList = noteList.concat(field.getTapNotes(col, (note:Note) -> !note.isSustainNote && note.requiresTap && !note.tooLate && StringTools.startsWith(note.noteType, 'LR')));
+    }
+    noteList.sort((a, b) -> Std.int(b.strumTime - a.strumTime));
+    while(noteList.length > 0){
+        var note:Note = noteList.pop();
+        var columns = lRChecks[note.column];
+        trace(columns);
+        for (col in columns) {
+            if (col == column) {
+                game.StrumPlayAnim(field, column, 0);
+                return field.input(note.column);
+            }
+        }
+    }
+}
+
+var lastNoteType;
+function onApplyNoteJudgment(note, judgeData, bot) {
+    lastNoteType = note.noteType;
+}
+
+function onApplyJudgmentDataPost(judgeData, diff, bot, show) {
+    if (judgeData.comboBehaviour == null && StringTools.startsWith(lastNoteType, 'LR')) {
+       game.stats.combo++; // Combos are added by two with l/r!
+    }
+}

@@ -16,7 +16,7 @@ using StringTools;
 /*
 The system is seperated into 3 classes:
 
-- NoteField
+- NoteFied
 	- This is the rendering component.
 	- This can be created seperately from a PlayField to duplicate the notes multiple times, for example.
 	- Needs to be linked to a PlayField though, so it can keep track of what notes exist, when notes get hit (to update receptors), etc.
