@@ -9,13 +9,13 @@ var lRChecks = [
 function onFieldInput(field, column, hitNotes){
     var noteList = [];
     for (col in [0,1,2,3]) {
-        noteList = noteList.concat(field.getTapNotes(col, (note:Note) -> !note.isSustainNote && note.requiresTap && !note.tooLate && StringTools.startsWith(note.noteType, 'LR')));
+        noteList = noteList.concat(field.getTapNotes(col, (note:Note) -> !note.isSustainNote && note.requiresTap && !note.tooLate));
     }
     noteList.sort((a, b) -> Std.int(b.strumTime - a.strumTime));
     while(noteList.length > 0){
         var note:Note = noteList.pop();
+        if (!StringTools.startsWith(note.noteType, 'LR')) break;
         var columns = lRChecks[note.column];
-        trace(columns);
         for (col in columns) {
             if (col == column) {
                 game.StrumPlayAnim(field, column, 0);

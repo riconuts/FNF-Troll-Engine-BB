@@ -2005,6 +2005,11 @@ class PlayState extends MusicBeatState
 		var noteData:Array<SwagSection> = PlayState.SONG.notes;
 		add(notes);
 
+		var chart:Dynamic = callOnScripts('transformChart', [noteData]);
+		if (chart is Array && chart != null) {
+			noteData = chart;
+		}
+
 		// get note types to load
 		for (section in noteData) {
 			for (songNotes in section.sectionNotes) {
@@ -2085,6 +2090,7 @@ class PlayState extends MusicBeatState
 		if (eventNotes.length > 1)
 			eventNotes.sort(sortByTime);
 
+
 		////
 		var prevTime = Sys.time();
 		generateNotes(noteData); // generates the chart
@@ -2117,6 +2123,7 @@ class PlayState extends MusicBeatState
 			keyCount = PlayState.keyCount;
 		
 		for (section in noteData) {
+			callOnScripts("onSectionGenerate", [section]);
 			for (songNotes in section.sectionNotes) {
 				var daStrumTime:Float = songNotes[0];
 				var daNoteData:Int = Std.int(songNotes[1]);
@@ -2124,6 +2131,7 @@ class PlayState extends MusicBeatState
 
 				var daColumn:Int = daNoteData % keyCount;
 				var susLength = Math.round(songNotes[2] / Conductor.stepCrochet) - 1;
+				if (susLength < 0) susLength = 0;
 				var prevNote:Note = (notes.length > 0) ? notes[notes.length - 1] : null;
 				var daType:String = songNotes[3];
 

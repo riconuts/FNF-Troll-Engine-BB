@@ -154,15 +154,17 @@ class MusicBeatState extends FlxUIState
 				Conductor.songPosition = Conductor.getAccPosition();
 			
 			case LAST_MIX:
-				// Stepmania method
-				// Works for most people it seems??
-				if (Conductor.lastSongPos != inst.time) {
-					Conductor.lastSongPos = inst.time;
-					lastMixTimer = 0;
-				}else
-					lastMixTimer += elapsed * 1000;
-				
-				Conductor.songPosition = inst.time + lastMixTimer;
+				if (inst != null) {
+					// Stepmania method
+					// Works for most people it seems??
+					if (Conductor.lastSongPos != inst.time) {
+						Conductor.lastSongPos = inst.time;
+						lastMixTimer = 0;
+					}else
+						lastMixTimer += elapsed * 1000;
+					
+					Conductor.songPosition = inst.time + lastMixTimer;
+				}
 
 		}
 	}
