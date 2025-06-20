@@ -144,7 +144,6 @@ class NotefieldRenderer extends FlxBasic {
 					for (shit in transforms)
 						shit.alphaMultiplier *= camera.alpha;
 					
-					object.sourceField.getScreenPosition(point, camera);
 					var drawItem = camera.startTrianglesBatch(graphic, object.antialiasing, true, null, true, shader);
 					@:privateAccess
 					{
