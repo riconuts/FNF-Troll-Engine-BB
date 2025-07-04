@@ -365,8 +365,6 @@ class ChartingState extends MusicBeatState
 	override function create()
 	{
 		instance = this;
-		FlxAssets.FONT_DEFAULT = Paths.font('calibrib.ttf');
-		
 		persistentUpdate = true;
 		persistentDraw = true;
 

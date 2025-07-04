@@ -119,6 +119,7 @@ class ModManager {
 		registerAux("xmod");
 		registerAux("cmod");
 		registerAux("movePastReceptors");
+		registerAux("nmvSimulator");
 		for (i in 0...PlayState.keyCount){
 			registerAux("xmod" + i);
 			registerAux("cmod" + i);

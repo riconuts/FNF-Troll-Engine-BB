@@ -390,6 +390,7 @@ class Paths
 		}
 		return atlas;
 	}
+	
 	inline static public function getSparrowAtlas(key:String, ?library:String):FlxAtlasFrames
 	{
 		try {

@@ -50,7 +50,7 @@ class DefaultFlxSoundTray extends FlxSoundTray
 		visible = false;
 		scaleX = _defaultScale;
 		scaleY = _defaultScale;
-		var tmp:Bitmap = new Bitmap(new BitmapData(_width, 30, true, 0x7F000000));
+		var tmp:Bitmap = new Bitmap(new BitmapData(_width, 30, true, 0xFFB7CFBC));
 		screenCenter();
 		addChild(tmp);
 
@@ -70,7 +70,7 @@ class DefaultFlxSoundTray extends FlxSoundTray
 		#if tgt
 		var dtf:TextFormat = new TextFormat(funkin.Paths.font("calibrib.ttf"), 10, 0xffffff);
 		#else
-		var dtf:TextFormat = new TextFormat(funkin.Paths.font("vcr.ttf"), 8, 0xffffff);
+		var dtf:TextFormat = new TextFormat(funkin.Paths.font("vcr.ttf"), 8, 0xff2e3731);
 		#end
 		dtf.align = TextFormatAlign.CENTER;
 		_text.defaultTextFormat = dtf;
@@ -85,7 +85,7 @@ class DefaultFlxSoundTray extends FlxSoundTray
 
 		for (i in 0...10)
 		{
-			tmp = new Bitmap(new BitmapData(4, i + 1, false, 0xffffff));
+			tmp = new Bitmap(new BitmapData(4, i + 1, false, 0xff2e3731));
 			tmp.x = bx;
 			tmp.y = by;
 			addChild(tmp);
@@ -135,17 +135,17 @@ class DefaultFlxSoundTray extends FlxSoundTray
 		y = 0;
 		visible = true;
 		active = true;
-		var globalVolume:Int = Math.round(FlxG.sound.volume * 10);
-
+		var globalVolume:Int = Math.round(FlxG.sound.volume * 100);
 		if (FlxG.sound.muted)
 		{
 			globalVolume = 0;
 		}
-		_text.text = "VOLUME:" + (globalVolume*10) + "%";
+		var sizeVol = Math.round(FlxG.sound.volume * 10);
+		_text.text = "VOLUME:" + globalVolume + "%";
 
 		for (i in 0..._bars.length)
 		{
-			if (i < globalVolume)
+			if (i < Math.floor(sizeVol))
 			{
 				_bars[i].alpha = 1;
 			}

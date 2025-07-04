@@ -18,6 +18,7 @@ class MasterEditorMenu extends MusicBeatState
 		//'Week Editor',
 		//'Menu Character Editor',
 		'Character Editor',
+		'State Loader',
 		'Chart Editor',
 		'Stage Editor',
 		'Stage Builder',
@@ -53,6 +54,7 @@ class MasterEditorMenu extends MusicBeatState
 				case 'Chart Editor': LoadingState.loadAndSwitchState(new ChartingState(), false);
 				case 'Stage Builder': MusicBeatState.switchState(new StageBuilderState());
 				case "Test Stage": MusicBeatState.switchState(new TestState());
+				case "State Loader": MusicBeatState.switchState(new StateLoaderState());
 				case "Test Beta Freeplay": MusicBeatState.switchState(new funkin.states.experimental.FreeplayState());
 				default: return;
 			}

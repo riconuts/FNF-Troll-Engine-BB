@@ -1,5 +1,6 @@
 package funkin.objects.hud;
 
+import flixel.math.FlxMath;
 import flixel.util.FlxStringUtil;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
@@ -113,10 +114,12 @@ class SignatureHUD extends CommonHUD {
 		else
 			scoreTxt.text = '$scoreString: ${FlxStringUtil.formatMoney(shownScore, false, true)}';
 
-        accuracyTxt.text = '${Highscore.floorDecimal(ratingPercent * 100, 3)}%';
+		var accuracy:Float = Highscore.floorDecimal(ratingPercent * 100, 3);
+		var accString:Dynamic = FlxMath.inBounds(accuracy, 0, 100) ? accuracy : '???';
+        accuracyTxt.text = '$accString%';
         statsTxt.text = 'Misses: ${stats.misses}\n${ratingFC} - ${grade}';
 		if (ClientPrefs.npsDisplay)
-			statsTxt.text += '\n'+stats.nps+'/'+stats.npsPeak;
+			statsTxt.text += '\nNPS: '+stats.nps+' / '+stats.npsPeak;
 		AlignmentUtil.centerObjectInObject(timeTxt, timeBar, Y);
 	}
 

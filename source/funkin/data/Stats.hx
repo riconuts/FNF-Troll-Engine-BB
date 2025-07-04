@@ -252,15 +252,9 @@ class Stats {
 		// trace(score, grade, clearType);
 	}
 
-	// this shit is so simple i am not even going to give it its own class
-    public inline function BBE2ComplexGetAccuracy(diff:Float):Float {
-		var highDiff = #if USE_EPIC_JUDGEMENT ClientPrefs.useEpics ? ClientPrefs.epicWindow : #end ClientPrefs.sickWindow;
-		return diff > highDiff ? highDiff / diff : 1;
-	}
-
 	// credit to CrowPlexus for this neat piece of code
 	var calcWeight = 40;
-	function SuperBBE2ComplexCalcMaxPoints(data:JudgmentData, time:Float):Float {
+	function MTFComplexCalculateMaxPoints(data:JudgmentData, time:Float):Float {
 		final tierLevel:Float = data.level ?? 5;
 		if (tierLevel >= 5) return -5.0;
 		var maxPoints: Float = 100.0 - (tierLevel * calcWeight);
@@ -298,12 +292,8 @@ class Stats {
 				
 				if (data.countAsHit != false)
 					totalPlayed += 5;
-			case BBE2COMPLEX: // Milisecond-based accuracy, this literally just divides the diff by the highest rating window lmao
-				totalNotesHit += BBE2ComplexGetAccuracy(Math.abs(diff));
-				if (data.countAsHit != false)
-					totalPlayed += 1;
 			case SUPERBBE2COMPLEX:
-				var shit = SuperBBE2ComplexCalcMaxPoints(data, Math.abs(diff));
+				var shit = MTFComplexCalculateMaxPoints(data, Math.abs(diff));
 				totalNotesHit += shit;
 				if (data.countAsHit != false)
 					totalPlayed += 1;
