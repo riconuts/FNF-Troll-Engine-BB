@@ -1,5 +1,6 @@
 package funkin.states.editors;
 
+import math.CoolMath;
 import flixel.system.FlxAssets;
 import flixel.ui.FlxBar;
 import funkin.data.CharacterData;
@@ -2257,6 +2258,17 @@ class ChartingState extends MusicBeatState
 	}
 
 	function updateKeys(elapsed:Float) {
+
+		if (FlxG.keys.justPressed.J && curSelectedNote != null && curSelectedNote[2] != null) {
+			var baba = curSelectedNote;
+			var bab = CoolMath.interpolateMass(curSelectedNote[0], curSelectedNote[0] + curSelectedNote[2], Std.int(curSelectedNote[2] / Conductor.stepCrochet * quantizationMult));
+			for (i in 0...bab.length - 1) {
+				if (i == 0) continue;
+				addNote(bab[i] + (Conductor.stepCrochet * (16 / quantization)), curSelectedNote[1], curSelectedNote[3], false);
+			}
+			setNoteSustain(0, baba);
+		}
+
 		if (FlxG.keys.justPressed.M) {
 			// Change mustHitSection value
 			var mustHit = !_song.notes[curSec].mustHitSection;
