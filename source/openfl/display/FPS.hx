@@ -87,7 +87,7 @@ class FPS extends TextField
 		var textFormat = new TextFormat(null, 12, color);
 
 		embedFonts = true;
-		textFormat.font = '_sans';
+		textFormat.font = 'Helvetica';
 		defaultTextFormat = textFormat;
 
 

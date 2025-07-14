@@ -155,9 +155,6 @@ class OptionsSubstate extends MusicBeatSubstate
 		"controls" => [
 			[
 				"keyboard", ["customizeKeybinds",]
-			], 
-			[
-				"controller", ["controllerMode",] // TODO customize binds for controllers
 			]
 		],
 		
@@ -382,8 +379,8 @@ class OptionsSubstate extends MusicBeatSubstate
 				});
 
 			case 'customizeKeybinds':
-				var substate:Dynamic = ClientPrefs.controllerMode ? new ButtonBindsSubstate() : new KeyBindsSubstate();
-				var bindsMap:Map<String, Array<Int>> = ClientPrefs.controllerMode ? ClientPrefs.buttonBinds : ClientPrefs.keyBinds;
+				var substate:Dynamic = new KeyBindsSubstate();
+				var bindsMap:Map<String, Array<Int>> = ClientPrefs.keyBinds;
 				
 				var currentBinds:Map<String, Array<Int>> = [];
 				for (key in bindsMap.keys())

@@ -1135,8 +1135,7 @@ class PlayState extends MusicBeatState
 		updateSongDiscordPresence();
 		#end
 
-		if (!ClientPrefs.controllerMode)
-			addKeyboardEvents();
+		addKeyboardEvents();
 
 		////
 		if(legacyOnCreatePost) // Just incase shit breaks???
@@ -2443,12 +2442,7 @@ class PlayState extends MusicBeatState
 			field.noteField.drawDistMod = ClientPrefs.drawDistanceModifier;
 			field.noteField.holdSubdivisions = Std.int(ClientPrefs.holdSubdivs) + 1;
 		}
-
-		if (ClientPrefs.controllerMode) {
-			removeKeyboardEvents();
-		}else {
-			addKeyboardEvents();
-		}
+		addKeyboardEvents();
 
 		var reBind:Bool = false;
 		for (opt in options) {
@@ -2868,9 +2862,6 @@ class PlayState extends MusicBeatState
 		modManager.update(elapsed, curDecBeat, curDecStep);
 
 		if (generatedMusic && !isDead) {
-			if (ClientPrefs.controllerMode) {
-				keyShit();
-			}
 
 			for (field in playfields) {
 				var holdingField = field.keysPressed.contains(true);
@@ -3344,6 +3335,8 @@ class PlayState extends MusicBeatState
 
 
 	public var transitioning = false;
+	// why is this hardcoded!!!
+	var gotoNextThing:Void -> Void = gotoMenus;
 	public function endSong():Void
 	{
 	// Should kill you if you tried to cheat
@@ -3383,8 +3376,6 @@ class PlayState extends MusicBeatState
 
 		if (saveScore && SONG.validScore && ratingFC != stats.fail)
 			Highscore.saveScoreRecord(SONG.song, difficultyName, stats.getScoreRecord());
-
-		var gotoNextThing:Void -> Void = gotoMenus;
 		var nextSong:Song = null;
 
 		if (chartingMode) {

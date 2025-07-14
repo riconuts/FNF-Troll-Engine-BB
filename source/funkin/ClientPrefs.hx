@@ -60,14 +60,6 @@ class ClientPrefs
 	inline public static function getOptionDefinitions():Map<String, OptionData>
 	{
 		return [
-			// gameplay
-			"controllerMode" => {
-				display: "Controller Mode",
-				desc: "When toggled, lets you play the game with a controller instead.",
-				type: Toggle,
-				value: false,
-				data: []
-			},
 			"fish" => {
 				display: "Giant Fucking Fish",
 				desc: "When toggled, a giant fucking fish appears that covers the game if you get 100% accuracy",
