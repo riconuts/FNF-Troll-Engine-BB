@@ -37,12 +37,9 @@ class CameraProjector extends FlxSprite {
         }
         if (projectingCamera != null) {
             transformMatrix = new Matrix();
-            transformMatrix.translate(
-                -(0.5 * projectingCamera.width * (projectingCamera.scaleX - projectingCamera.initialZoom) / projectingCamera.scaleX), 
-                -(0.5 * projectingCamera.height * (projectingCamera.scaleY - projectingCamera.initialZoom) / projectingCamera.scaleY)
-            );
             transformMatrix.scale(projectingCamera.scaleX / resScale.x, projectingCamera.scaleY / resScale.y);
-            pixels.draw(projectingCamera.canvas, transformMatrix);
+            @:privateAccess
+            pixels.draw(projectingCamera._scrollRect, transformMatrix);
         }
     }
 }
