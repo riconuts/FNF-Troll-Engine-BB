@@ -13,25 +13,14 @@ NOTE: Do not treat this as an official release!!! This version of the engine is 
 
 Some questions might be asked about this fork in particular. So I might answer them here. 
 
-Q: Why not just use base Troll?
+Q: Why not PR these changes to Troll Engine
 
-A:
+A: As a programmer I understand that what I'm doing is best described as bloat in some reigonal dialects.
+It isn't best to do add changes for an engine only I use to it's base version for this reason.
 
-Some features which I wish to be in base Troll simply isn't there because it doesn't fit the needs of the project, this fork specifically fits my own needs for my own projects.
+Q: Why not just use X or Y Engine
 
-Q: What about your V-Slice mods?
-
-A:
-
-Big ones like song mods are currently being ported to this Troll fork right now, consider all the QOL mods obselete and no longer in active development.
-
-V-Slice is not a reliable modding platform. For more information check out [this](rants/vslice.md)
-
-Q: Why not just use Psych, or other forks like "P-Slice", or NightmareVision, or even Codename?
-
-A:
-
-I will not be able to fit this in a tiny readme, check [this](rants/others.md) instead.
+A: I don't want to.
 
 # Added features
 
