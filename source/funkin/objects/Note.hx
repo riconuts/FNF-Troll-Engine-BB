@@ -647,7 +647,7 @@ class Note extends NoteObject
 	override function draw()
 	{		
 		colorSwap.daAlpha = alphaMod * alphaMod2;
-		if (!inEditor && canIndicateNear && canBeHit && !isSustainNote) {
+		if (!inEditor && canIndicateNear && canBeHit && !isSustainNote && !indicated) {
 			canIndicateNear = false;
 			indicated = true;
 			colorSwap.brightness += 2;
