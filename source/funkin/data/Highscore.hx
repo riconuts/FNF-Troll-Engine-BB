@@ -42,7 +42,11 @@ class Highscore {
 		"w3" => "Wife3",
 		"Wife3" => "w3",
 		"pb" => "PBot",
-		"PBot" => "pb"
+		"PBot" => "pb",
+		"bbe2c" => "BBE2Complex",
+		"BBE2Complex" => "bbe2c",
+		"sbbe2c" => "SuperBBE2Complex",
+		"SuperBBE2Complex" => "sbbe2c"
 	];
 
 	public static var grades:Map<String, Array<Array<Dynamic>>> = [
@@ -107,6 +111,8 @@ class Highscore {
 		"w3" => 1, // wife3
 		"pb" => 1, // pbot
 		"s" => 1, // simple
+		"bbe2c" => 1,
+		'sbbe2c' => 1,
 		"" => 2 // judgement
 	];
 /* 	static var wifeVersion:Float = Wife3.version; // wife version. TECHNICALLY 3, but doing 1 for the sake of being easy
