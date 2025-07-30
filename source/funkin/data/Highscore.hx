@@ -300,7 +300,6 @@ class Highscore {
 	public static function resetSong(song:String, chartName:String){
 		var formattedSong:String = formatSong(song, chartName);
 		trace('reset song score "$formattedSong"');
-
 		currentSongData.remove(formattedSong);
 		save.data.saveData.set(currentLoadedID, currentSongData);
 		save.flush();

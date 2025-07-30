@@ -328,7 +328,7 @@ class FreeplayState extends MusicBeatState
 
 			openSubState(new ResetScoreSubState(
 				songName, 
-				curDiffStr.toLowerCase() == 'normal' ? '' : curDiffStr, 
+				curDiffStr, 
 				false, 
 				displayName
 			));
